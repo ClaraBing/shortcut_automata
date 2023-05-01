@@ -477,7 +477,7 @@
           Krohn-Rhodes tells us that to simulate \(\mathcal{A}\), it suffices to simulate both types of prime factors as well as
           the mechanism by which these factors are combined together.
           We have seen that each type of factors can be implemented by 1 Transformer layer, and it can be shown that the
-          combining steps can be implemented with \(O(1)\) layers as well.
+          combining steps can be implemented with a constant number of layers as well.
           The overall number of combing steps can be shown to be \(\text{poly}(|Q|)\), so the total number of layers to simulate
           \(\mathcal{A}\) is \(\text{poly}(|Q|)\), independent of the sequence length \(T\).
           Theorem 2 in <a href="https://arxiv.org/abs/2210.10749">the paper</a> provides formal statement of the results.
@@ -501,7 +501,7 @@
           What we've seen so far addresses the theoretical capabilities of Transformers for simulating semiautomata, where we saw
           a divide-and-conquer approach that gives a \(O(\log T)\)-layer simulator for any \(\mathcal{A}\), as well as a more
           succinct \(O(\text{poly}(|Q|)\)-layer construction by Krohn-Rhodes that holds for any \(\mathcal{A}\) that is solvable.
-          However, it is unclear whether these solutions can be found in practice with finite samples, which is the focus of this section.
+          However, it is unclear whether these solutions can be found in practice using standard training pipelines, which is the focus of this section.
         </p>
       </div>
 
@@ -532,7 +532,7 @@
         </p>
 
         <p>
-          Table 1 shows the results for 19 different \(\mathcal{A}\) across 16 choices of Transformer depth, which gives a positive answer to our question.
+          Table 1 shows the results for 19 different \(\mathcal{A}\) across 16 choices of Transformer depth, giving a positive answer to our question.
           Moreover, the number of layers required to achieve good performance roughly follows the depth of decomposition understood by theory.
           At the top part of the table we have some "simple" automata, such as Dyck and cyclic groups, which can be simulated with \(O(1)\) layers.
           On the bottom we have some more complex automata, such as the quaternion group \(Q_8\) (whose decomposition requires going through the wreath product), the alternating group \(A_5\) (which is the smallest non-solvable group), and the symmetric group \(S_5\) (which is \(NC^1\) complete).
@@ -558,13 +558,14 @@
         </p>
 
         <p>
-          Let's consider the <em>1d gridworld</em>, which consists of \(n\) states on a 1d line.
+          Let's consider the <em>gridworld</em> automata, a classic setup commonly used in reinforcement learning.
+          In the following, we will focus on the 1d version of the gridworld, which consists of \(n\) states on a 1d line.
           There are 2 actions, going left or right, which updates the state to the left or right by 1 step, except when it's already at the leftmost or rightmost boundary (i.e. state 1 or \(n\)), in which case the action does not change the state.
         </p>
 
         <figure class="centered-image" id="fig-gridworld">
           <img style='width:60%' src="resources/gridworld.png" alt="1d gridworld"><br>
-          <figcaption style="width: 50%">Figure 9: An exampe of 1d gridworld with \(n=4\); some boundary states are highlighted
+          <figcaption style="width: 50%">Figure 9: An exampe of 1d gridworld with \(n=4\), starting with \(q_0=1\); some boundary states are highlighted
             with yellow circles.
           </figcaption>
         </figure>
@@ -584,8 +585,10 @@
         </p>
 
         <p>
-          Figure 10 shows some evidence that Transformer indeed learns such boundary detectors (which helped us to find an exact algorithm in Theorem 3 of <a href="https://arxiv.org/abs/2210.10749">the paper</a> -- it figured this out before us &#x1F916;), where the model puts all attention weight of a row at a single location, which is exactly where the last boundary state is.
-3        <figure class="centered-image" id="fig-gridworld-boundary">
+          Figure 10 shows some evidence that Transformer indeed learns these boundary detectors (and such mechanistic understanding [<a href="#cite-Nanda">Nanda et al. 23</a>] helped us find an exact algorithm in Theorem 3 of <a href="https://arxiv.org/abs/2210.10749">the paper</a> --
+          it figured this out before us &#x1F916;), where the model puts all attention weight of a row at a single location, which is exactly where the last boundary state is.
+
+        <figure class="centered-image" id="fig-gridworld-boundary">
           <img style='width:40%' src="resources/boundary_detection.png" alt="boundary detection for gridworld"><br>
           <figcaption style="width: 80%">Figure 10: Row-normalized causal attention maps from the last layer of a 4-layer GPT2 model.
             The white/gray dots mark the positions where the state is in \(\{1, n\}\).
@@ -612,7 +615,7 @@
         Well, maybe not.
         One thing you may have noticed is that the experiments we have seen are a bit idealized, in the sense that the training signals are clean and fully available, and the testing distribution is exactly the same as the one during training.
         What would happen if either training or testing become less ideal?
-        As we will see next, less ideal setups expose the <em>brittleness</em> of these empirically found shortcuts.
+        As we will see next, despite the good in-distribuion performance, less ideal setups--including limited supervision and OOD testing--expose the <em>brittleness</em> of these empirically found shortcuts.
       </p>
 
       <h4 class="paragraph">2.1. Brittleness when trained with limited supervision</h4>
@@ -733,7 +736,10 @@
             Extrapolation</a>
         </li>
         <li id="cite-Abnar">Samira Abnar, Mostafa Dehghani, Willem Zuidema:
-          <a href="https://arxiv.org/abs/2006.00555">Transferring Inductive Biases through Knowledge Distillation
+          <a href="https://arxiv.org/abs/2006.00555">Transferring Inductive Biases through Knowledge Distillation</a>
+        </li>
+        <li id="cite-Nanda">Neel Nanda, Lawrence Chan, Tom Lieberum, Jess Smith, Jacob Steinhardt:
+          <a href="https://arxiv.org/abs/2301.05217">Progress measures for grokking via mechanistic interpretability
 </a>
         </li>
         </ul>
