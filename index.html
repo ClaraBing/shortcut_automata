@@ -67,16 +67,16 @@
         <div class='row'>
           <div class='col-md-8 no-pad'>
             <div class='authors'>
-              <a target="blank" href="https://clarabing.github.io/">Bingbin Liu</a>,
-              <a target="blank" href="https://www.jordantash.com/">Jordan T. Ash</a>,
-              <a target="blank" href="https://www.surbhigoel.com/">Surbhi Goel</a>, 
-              <a target="blank" href="https://people.cs.umass.edu/~akshay/">Akshay Krishnamurthy</a>,
-              <a target="blank" href="https://cyrilzhang.com/">Cyril Zhang</a>.
+              <a target="blank" href="https://clarabing.github.io/">Bingbin Liu</a><sup>1</sup>,
+              <a target="blank" href="https://www.jordantash.com/">Jordan T. Ash</a><sup>2</sup>,
+              <a target="blank" href="https://www.surbhigoel.com/">Surbhi Goel</a><sup>3</sup>, 
+              <a target="blank" href="https://people.cs.umass.edu/~akshay/">Akshay Krishnamurthy</a><sup>2</sup>,
+              <a target="blank" href="https://cyrilzhang.com/">Cyril Zhang</a><sup>2</sup>.
             </div>
             <div class='affiliations'>
-              Carnegie Mellon University,
-              University of Pennsylvania,
-              Microsoft Research.
+              <sup>1</sup>Carnegie Mellon University,
+              <sup>2</sup>Microsoft Research,
+              <sup>3</sup>University of Pennsylvania.
             </div>
           </div>
           <figure id="fig-logo">
@@ -96,13 +96,13 @@
 
         <div class='row'>
 
-          <p><em>One-sentence version</em>: Non-recurrent Transformers can simulate the recurrent dynamics of finite-state automata, via counterintuitive <em>shortcuts</em>
+          <p><em>One-sentence version</em>: Shallow, non-recurrent Transformers can simulate the recurrent computation of finite-state automata, via counterintuitive <em>shortcuts</em>
           using a number of layers much fewer than the number of recurrent steps.
           </p>
 
           <p><em>Longer version</em>:
             Algorithmic reasoning requires capabilities which are most naturally understood through recurrent models of computation, like the Turing machine.
-            However, Transformers, while lacking recurrence, are able to perform such reasoning using far fewer layers than the number of reasoning steps.
+            Transformers, while lacking recurrence, are able to perform such reasoning using far fewer layers than the number of reasoning steps.
             To understand the solutions found by Transformers, we look at the setting of learning automata, and model algorithmic reasoning as simulating the computation of automata.
             <ul>
             <li>Our theoretical results characterize <b>shortcut solutions</b>, whereby a Transformer can exactly replicate the computation of an automaton \(\mathcal{A}\) on sequences of length \(T\) with \(o(T)\) layers.
@@ -113,7 +113,7 @@
             </li>
             <li>
             Empirically, we train Transformers to simulate a wide variety of automata, and show that shortcut solutions can be learned via standard training.
-            While empirical shortcuts are found to be brittle (e.g. when tested OOD), such brittleness can be mitigated when we guide Transformers to find autoregressive solutions.
+            While empirical shortcuts are found to be brittle (e.g. when tested out-of-distribution), such brittleness can be mitigated when we guide Transformers to find autoregressive solutions.
             </li>
           </p>
         </div>
@@ -185,18 +185,19 @@
 
       <div class="row">
       <p>
-        Transformer-based large language models have made many headlines with their impressive capabilities. Many are surprised by the level of intelligence of these models, often demonstrated with complex reasoning tasks.
-        But what does "reasoning" mean exactly? This is a complicated and somewhat philosophical question that we do not attempt to answer fully; instead, we will focus on <em>algorithmic reasoning</em>, which include the abilities to parse certain structures, to infer information based on contexts, to retrieve from knowledge bases or memory, or to search for solutions.
+        Transformer-based large language models have made many headlines with their impressive emergent capabilities.
+        Many are surprised by the level of abilities of these models, often demonstrated with complex reasoning tasks.
+        But what does "reasoning" mean exactly? This is a complicated and somewhat philosophical question that we do not attempt to answer; instead, we focus on <em>algorithmic reasoning</em>, which include the abilities to parse certain structures, to infer information based on contexts, to retrieve from knowledge bases or memory, or to search for solutions.
         All of these can be modeled by discrete state transitions--to see this, recall that Turing machines are universal computation models and have discrete state transitions. 
       </p>
 
       <p>
-        In this work, we will look at a much more restrictive of discrete-state machines, which are nevertheless interesting.
-        Specifically, we consider (finite-state) <em>automata</em>, denoted as \(\mathcal{A}\), which are discrete-state dynamical systems consisting of 3 parts: 
+        In this work, we will look at a much more restrictive set of discrete-state machines, which are nevertheless interesting.
+        Specifically, we consider the (finite-state) <em>automaton</em>, denoted as \(\mathcal{A}\), which is a discrete-state dynamical system consisting of 3 parts: 
         the state space \(Q\) (we consider finite-size \(Q\) only), the alphabet \(\Sigma\), and the transition function \(\delta\).
-        At each time step \(t\), \(\delta\) takes in the previous state \(q_{t-1}\) and the current input \(\sigma_t \in \Sigma\), and transitions to the next state \(q_t\).
+        At each time step \(t\), \(\delta\) takes in the previous state \(q_{t-1} \in Q\) and the current input \(\sigma_t \in \Sigma\), and transitions to the next state \(q_t\).
         That is,
-        \[\mathcal{A} := \{Q, \Sigma, \delta\}, \quad \delta(q_{t-1}, \sigma_t) = q_t \text{, where } q_{t-1}, q_t \in Q, \sigma_t \in \Sigma. \]
+        \[\mathcal{A} := \{Q, \Sigma, \delta\}, \quad \delta(q_{t-1}, \sigma_t) = q_t \text{, where } q_{t-1}, q_t \in Q, \sigma_t \in \Sigma \text{, starting from some } q_0 \in Q.\]
       </p>
       
       <p>
@@ -220,7 +221,7 @@
 
       <p>
         Though the parity counter may seem toyish, it turns out to be a key building block for the Transformer solutions we will see later (think of it as the prime number 2: simple but important).
-        Moreover, despite restricted with a finite state space, \(\mathcal{A}\) can model complex objects (e.g. the Rubik's cube!) and subsumes many tasks in prior work, such as arithmetics [<a href="#cite-Nogueira">Nogueira et al. 21</a>], regular languages ([<a href="#cite-Bhattamishra">Bhattamishra et al. 20</a>]), and hierarchical languages (e.g. Dyck [<a href="#cite-Yao">Yao et al. 21</a>]) with bouded depth.
+        Moreover, despite restricted with a finite state space, finite-state automata can model complex objects (e.g. the Rubik's cube!) and subsumes many tasks in prior work, such as arithmetics [<a href="#cite-Nogueira">Nogueira et al. 21</a>], regular languages ([<a href="#cite-Bhattamishra">Bhattamishra et al. 20</a>]), and hierarchical languages (e.g. Dyck [<a href="#cite-Yao">Yao et al. 21</a>]) with bouded depth.
       </p>
       </div>
 
@@ -294,8 +295,8 @@
 
       <div class="row">
         <p>
-          Given the recurrent nature of the reasoning task, it may not be obvious a prior why we can always hope for shortcuts.
-          The answer turns out to be a single word: associtiativity.
+          Given the recurrent nature of the reasoning task, it may not be obvious apriori why we can always hope for shortcuts.
+          The answer turns out to rely on a single property: associtiativity.
         </p>
         
         <p>
@@ -396,7 +397,7 @@
         </figure>
 
       <p>
-        Next, note that once we figure out the direction of the car at each position, the position of the car can be determined by taking the signed sum of <span style="color: #5C93F2">\(D\)</span> mod 4 (since there are 4 positions), where the signs are given by the parity from <span style="color: orange">\(U\)</span>.
+        Next, note that the direction of the car governs the drive action, and once we figure out the direction at each position, the position of the car can be determined by taking the signed sum of <span style="color: #5C93F2">\(D\)</span> mod 4 (since there are 4 positions), where the signs are given by the parity from <span style="color: orange">\(U\)</span>.
       </p>
         <figure class="centered-image" id="fig-car-step2">
           <div class="image-container">
@@ -409,7 +410,7 @@
 
       <p>
         Each of the sum-mod operation can be implemented with 1 Transformer layer: the sum is implemented with uniform attention, and the mod is computed with the MLP of the Transformer layer.
-        Handling the signed sum requires an extra \(O(1)\) layer, so the total number of layers is \(O(1)\), which is smaller than \(\log T\) -- in fact, it is independent of \(T\)!
+        Handling the signed sum requires one extra layer, so the total number of layers is \(O(1)\), which is smaller than \(\log T\) -- in fact, it is independent of \(T\)!
       </p>
       </div>
 
@@ -420,7 +421,7 @@
       <div class="row">
         <p>
           The takeaway from the car example is that if we can decompose \(\mathcal{A}\) into "simpler" objects that each can be easily simulated, then simulating \(\mathcal{A}\) is also easy.
-          The car example might appear to be a rare special case at first glance, but it turns out that the existence of such decomposition is surprising common.
+          The car example might appear to be a rare special case at first glance, but it turns out that the existence of such decomposition is surprisingly common.
         </p>
 
         <p>
