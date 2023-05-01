@@ -425,6 +425,16 @@
         </p>
 
         <p>
+          <span style="color: #8e8e8e">
+          <em>Side note: results in this section applies to all solvable \(\mathcal{A}\), that is, semiautomata whose transformation semigroup contains solvable groups only. 
+            Solvable groups are defined as the groups for which all quotients in the Jordan-Holder series are abelian.
+            Please see <a href="https://arxiv.org/pdf/2210.10749.pdf#page=19">Section A.2</a> of our paper for a self-complete introduction to automata and (semi)groups, 
+            as well as <a href="https://arxiv.org/pdf/2210.10749.pdf#page=48">Definition 6</a> for a formal definition of solvable semiautomata.
+          </em>
+          </span>
+        </p>
+
+        <p>
           The tools we need come from the <b>Krohn-Rhodes Theorem</b>, a landmark result which can be considered as a vast generalization of (the uniqueness of) prime factorization for integers to automata.
           At a high level, Krohn-Rhodes decomposition theorem says that any <em>solvable</em> \(\mathcal{A}\) can be decomposed into 2 types of "prime factors": mod counters and memory units.
           The <b>mod counter</b> is a generalization of the parity counter, where instead of mod-2, it can be mod-\(p\) for any prime
@@ -637,6 +647,8 @@
         However, Transformers struggle under incomplete supervision.
         Figure 11 shows experiments on length-100 sequences from the symmetric group \(S_5\).
         Transformer becomes harder to train as the supervision signal gets sparser, while LSTM gets 100% accuracy in all cases.
+        Why does LSTM (or RNNs in general) perform so well?
+        This is likely because the recurrent computation of LSTM fits better with the recurrence structure in automata, as we will discuss <a href="#discuss:inductive-bias">later</a>.
       </p>
 
       </div>
@@ -670,8 +682,8 @@
         At test time, the model performance degrades significantly when the number of 1s deviates from 20, as shown by the dark blue line in Figure 12.
         The poor performance at the upper tail is expected, since these higher values are less commonly seen in the training sequences.
         However, the model should have seen the small values of number of 1s from subsequences; then why is the performance still low?
-        A potential reason is that the model has learned to leverage the correlation between the position (provided by positional encoding) and the number of 1s till this position, and hence struggles when such correlation is broken at test time.
-        This hypothesis is supported by the fact that when we train the model with randomly shifted position encoding, the performance at the small values of \((\sum_{\tau \in [t]} \sigma_t)\) is much better, as shown by the light blue line in Figure 12.
+        A potential reason is that the model has learned to leverage the correlation between the position (provided by positional encodings) and the number of 1s till this position, and hence struggles when such correlation is broken at test time.
+        This hypothesis is supported by the fact that when we train the model with randomly shifted position encodings, the performance at the small values of \((\sum_{\tau \in [t]} \sigma_t)\) is much better, as shown by the light blue line in Figure 12.
       </p>
 
       </div>
@@ -688,24 +700,23 @@
           </figure>
         <p>
           Finally, we show that these problems can be circumvented with the autoregressive mode of Transformer:
-          Instead of predicting \(\{q_t\}\) for all \(t\) at once, we use the idea of scratchpad [<a href="#cite-Nye">Nye et al. 21</a>] and train the Transformer to predict \(q_t\) one at a time, taking previous \(q_{t-1}\) as input. 
-          We also add recency bias [<a href="#cite-Press">Press et al. 21</a>] to encourage the model to attend more on recent inputs.
-          Scratchpad with recency biases helps guide the Transformer to learn an iterative solution, where each step tries to compute \(\delta\).
+          Instead of predicting \(\{q_t\}\) for all \(t\) at once, we use the idea of scratchpad [<a href="#cite-Nye">Nye et al. 21</a>] and train the Transformer to predict \(q_t\) one at a time, taking previous states \(\{q_{\tau}\}_{\tau < t}\) as input. 
+          We also add recency bias [<a href="#cite-Press">Press et al. 21</a>] to encourage the model to depend more on the more recency past.
+          Scratchpad with recency biases helps guide the Transformer to learn an iterative/autoregressive solution, where each step tries to compute \(\delta\).
           As shown in Figure 13, this resolves the aforementioned OOD generalization failure of Transformer.
+          However, the autoregressive solution is no longer a shortcut, and we loose the benefit of parallelism.
         </p>
 
-      <p>
+      <p id="discuss:inductive-bias">
         <em>Can we develop robust shortcuts?</em>
         As discussed earlier, shortcuts are computationally appealing because it has a better dependency on the sequence
         length.
-        However, in practice, iterative/autoregressive solutions consistently outperform empirically-found shortcuts in terms of robustness.
-        This is potentially due to the more favorable <em>recurrent inductive bias</em>, which is sequential and recursive in nature and bottlenecked by memory [<a href="#cite-Abnar">Abnar et al. 20</a>].
+        However, in the automata simulation experiments, iterative/autoregressive solutions consistently outperform empirically-found shortcuts in terms of robustness.
+        This is potentially due to the more favorable <em>recurrent inductive bias</em> [<a href="#cite-Abnar">Abnar et al. 20</a>], which by being sequential and recursive in nature, matches more naturally with the recurrence structure of automata.
         Developing better generalizing shortcuts might require incorporating such inductive biases and is an interesting future direction.
       </p>
 
-    </div>
-
-
+      </div>
 
       
       <div class='row'>
