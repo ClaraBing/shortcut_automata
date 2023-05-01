@@ -1,0 +1,748 @@
+<html>
+  <head>
+    <title>Shortcut to automata</title>
+    <link rel="icon"  href="resources/parity.png" />
+    <link rel="shortcut icon"  href="resources/parity.png" />
+
+    <script src='js/jquery-1.11.2.min.js'></script>
+    <script src='js/bootstrap.min.js'></script>
+    <link href='css/bootstrap.min.css' rel='stylesheet'>
+    <link href='css/project.css' rel='stylesheet'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900,100italic,100,300,300italic,400italic,500italic,900italic,700italic' rel='stylesheet' type='text/css'>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-54521516-2', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          var coll = document.getElementsByClassName('collapsible');
+          var i;
+
+          for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener('click', function () {
+              this.classList.toggle('active');
+              var content = this.nextElementSibling;
+              if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+              } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+              }
+            });
+          }
+        });
+    </script>
+
+    <style>
+      .logo-image {
+          width: 100%;
+          max-width: 600px;
+          height: auto;
+          display: block;
+          margin: 10px 0;
+      }
+    </style>
+  </head>
+
+
+
+  <body>
+
+    <div class='container'>
+
+
+        <div class='col-md-12'>
+
+          <div class='row'>
+           <div class='title-header'>Transformers Learn Shortcuts to Automata</div>
+          </div>
+        <div class='row'>
+          <div class='col-md-8 no-pad'>
+            <div class='authors'>
+              <a target="blank" href="https://clarabing.github.io/">Bingbin Liu</a>,
+              <a target="blank" href="https://www.jordantash.com/">Jordan T. Ash</a>,
+              <a target="blank" href="https://www.surbhigoel.com/">Surbhi Goel</a>, 
+              <a target="blank" href="https://people.cs.umass.edu/~akshay/">Akshay Krishnamurthy</a>,
+              <a target="blank" href="https://cyrilzhang.com/">Cyril Zhang</a>.
+            </div>
+            <div class='affiliations'>
+              Carnegie Mellon University,
+              University of Pennsylvania,
+              Microsoft Research.
+            </div>
+          </div>
+          <figure id="fig-logo">
+            <img style='width:30%' src="resources/affiliations.png" alt="Image description">
+          </figure>
+
+
+        </div>
+
+        <div class='row'>
+          <hr>
+        </div>
+
+        <div class='row'>
+          <div class='section-header'>TL;DR</div>
+        </div>
+
+        <div class='row'>
+
+          <p><em>One-sentence version</em>: Non-recurrent Transformers can simulate the recurrent dynamics of finite-state automata, via counterintuitive <em>shortcuts</em>
+          using a number of layers much fewer than the number of recurrent steps.
+          </p>
+
+          <p><em>Longer version</em>:
+            Algorithmic reasoning requires capabilities which are most naturally understood through recurrent models of computation, like the Turing machine.
+            However, Transformers, while lacking recurrence, are able to perform such reasoning using far fewer layers than the number of reasoning steps.
+            To understand the solutions found by Transformers, we look at the setting of learning automata, and model algorithmic reasoning as simulating the computation of automata.
+            <ul>
+            <li>Our theoretical results characterize <b>shortcut solutions</b>, whereby a Transformer can exactly replicate the computation of an automaton \(\mathcal{A}\) on sequences of length \(T\) with \(o(T)\) layers.
+            By representing automata using the algebraic structure of their underlying transformation semigroups, we provide \(O(\log T)\)-depth constructions for all automata and \(O(1)\)-depth constructions for all solvable automata.
+              <figure class="centered-image" id="fig-tldr">
+                <img style='width:65%; margin-top:20px;' src="resources/solutions.png" alt="Solutions to reasoning">
+              </figure>
+            </li>
+            <li>
+            Empirically, we train Transformers to simulate a wide variety of automata, and show that shortcut solutions can be learned via standard training.
+            While empirical shortcuts are found to be brittle (e.g. when tested OOD), such brittleness can be mitigated when we guide Transformers to find autoregressive solutions.
+            </li>
+          </p>
+        </div>
+
+      <div class='row vspace-top'>
+        <hr>
+      </div>
+
+      <div class='row'>
+        <div class='section-header'>Resources</div>
+      </div>
+
+      <div class='row'>
+      <ul>
+        <li><a target="_blank" href="https://arxiv.org/abs/2210.10749">Paper</a> (<a target="_blank" href="https://openreview.net/forum?id=De4FYqjFueZ">OpenReview</a>)
+        </li>
+        <li>A <a href="https://huggingface.co/datasets/synthseq/automata/tree/main">HuggingFace Dataset</a> for various automata.
+        </li>
+        <li>Talks: <a target="_blank" href="https://recorder-v3.slideslive.com/#/share?share=80941&s=7f9d9970-75c3-493f-913b-dc1939752743">5min version</a> / <a target="_blank" href="https://www.youtube.com/watch?v=g8zdumOAWzw">1h version</a>
+        </li>
+        <li>Github: coming soon! <img src="resources/meow_code.gif" alt="Coding hard..." class="custom-emoji">
+        </li>
+        <li>
+          <button class="collapsible">Citation</button>
+          <div class="content">
+            <div class='row cite vspace-top'>
+              @article{liu2023transformers,<br>
+              <ul>
+                title = {Transformers Learn Shortcuts to Automata},<br>
+                author = {Bingbin Liu and J. Ash and Surbhi Goel and A. Krishnamurthy and Cyril Zhang},<br>
+                booktitle = {International Conference on Learning Representations},
+                year = {2023},<br>
+                url = {https://openreview.net/forum?id=De4FYqjFueZ},<br>
+                doi = {10.48550/arXiv.2210.10749},<br>
+              </ul>
+              }
+            </div>
+          </div>
+        </li>
+      </ul>
+      </div>
+
+      <div class='row'>
+        <hr>
+      </div>
+
+      <div class="row" id="outline">
+        <div class='section-header'>Outline</div>
+      </div>
+
+      <div class="row">
+        <ul>
+          <li><a href="#sec-formalizing">Formalizing reasoning with automata</a></li>
+          <li><a href="#sec-shortcut">Shortcut solutions</a></li>
+          <li><a href="#sec-associative">Why can we hope for shortcuts?</a></li>
+          <li><a href="#sec-krohn-rhodes">Shorter shortcuts with Krohn-Rhodes</a></li>
+          <li><a href="#sec-empirical">Empirical results</a></li>
+        </ul>
+      </div>
+
+      <div class='row'>
+        <hr>
+      </div>
+
+      <div class="row" id="sec-formalizing">
+        <div class='section-header'>Formalizing reasoning with automata <span style="font-size: 20px; font-weight: normal">[Back to <a href="#outline">outline</a>]</span>
+        </div>
+      </div>
+
+      <div class="row">
+      <p>
+        Transformer-based large language models have made many headlines with their impressive capabilities. Many are surprised by the level of intelligence of these models, often demonstrated with complex reasoning tasks.
+        But what does "reasoning" mean exactly? This is a complicated and somewhat philosophical question that we do not attempt to answer fully; instead, we will focus on <em>algorithmic reasoning</em>, which include the abilities to parse certain structures, to infer information based on contexts, to retrieve from knowledge bases or memory, or to search for solutions.
+        All of these can be modeled by discrete state transitions--to see this, recall that Turing machines are universal computation models and have discrete state transitions. 
+      </p>
+
+      <p>
+        In this work, we will look at a much more restrictive of discrete-state machines, which are nevertheless interesting.
+        Specifically, we consider (finite-state) <em>automata</em>, denoted as \(\mathcal{A}\), which are discrete-state dynamical systems consisting of 3 parts: 
+        the state space \(Q\) (we consider finite-size \(Q\) only), the alphabet \(\Sigma\), and the transition function \(\delta\).
+        At each time step \(t\), \(\delta\) takes in the previous state \(q_{t-1}\) and the current input \(\sigma_t \in \Sigma\), and transitions to the next state \(q_t\).
+        That is,
+        \[\mathcal{A} := \{Q, \Sigma, \delta\}, \quad \delta(q_{t-1}, \sigma_t) = q_t \text{, where } q_{t-1}, q_t \in Q, \sigma_t \in \Sigma. \]
+      </p>
+      
+      <p>
+        Technically speaking, the above is a <em>semiautomaton</em>, since an <em>automaton</em> additionally includes an output function which tells if a state is an acceptance state or not, whereas a semiautomaton is only concerned with the underlying dynamics of the states, which is our focus in this work.
+        In the following, we will use the word "automaton" and "semiautomaton" interchangably, both referring to the dynamics of states, rather than the acceptane status.
+      </p>
+ 
+      <p>
+      A simple example of \(\mathcal{A}\) is what we call the "parity counter": it's a two-state machine, i.e. \(Q = \{0, 1\}\), with 2 inputs \(\Sigma = \{0, 1\}\).
+      The transition functions is defined as \(\delta(q_{t-1}, \sigma_t) = q_{t-1} \oplus \sigma_t \) where \(\oplus\) denotes the XOR operator.
+      That is, if \(\sigma_t = 1\) then we change the state as \(q_{t} = 1-q_{t-1}\), otherwise the state is unchanged.
+      </p>
+
+      <figure class="centered-image" id="fig-parity">
+        <img style='width:13%' src="resources/parity.png" alt="Parity counter"><br>
+        <figcaption>Figure 1: Example of \(\mathcal{A}\): the <b>parity counter</b>: this is a simple but important example
+          and will
+          show up repeatedly in the following.
+        </figcaption>
+      </figure>
+
+      <p>
+        Though the parity counter may seem toyish, it turns out to be a key building block for the Transformer solutions we will see later (think of it as the prime number 2: simple but important).
+        Moreover, despite restricted with a finite state space, \(\mathcal{A}\) can model complex objects (e.g. the Rubik's cube!) and subsumes many tasks in prior work, such as arithmetics [<a href="#cite-Nogueira">Nogueira et al. 21</a>], regular languages ([<a href="#cite-Bhattamishra">Bhattamishra et al. 20</a>]), and hierarchical languages (e.g. Dyck [<a href="#cite-Yao">Yao et al. 21</a>]) with bouded depth.
+      </p>
+      </div>
+
+      <div class="row"><h3>Reasoning task: simulating \(\mathcal{A}\)</h3></div>
+
+      <div class="row">
+      <p>
+        Now that we have formulated the reasoning process as transitions in a finite-state machine \(\mathcal{A}\), we can model "learning to reason" as simulating the computation of \(\mathcal{A}\).
+        More precisely, "simulating" means learning the sequence-to-sequence function given by \(\mathcal{A}\): for a given sequence length \(T\) and some initial state \(q_0 \in Q\), we want to learn the mapping between an input sequence \(\sigma_1, \sigma_2, \cdots, \sigma_T\) to the sequence of states \(q_1, q_2, \cdots, q_T\) which \(\mathcal{A}\) goes through upon seeing the inputs.
+      </p>
+
+      <p>
+        Note that there are usually multiple ways to simulate \(\mathcal{A}\). Take the parity counter as an example, there are at least 2 ways to simulate it.
+        The first is an iterative solution, where we simply apply the definition of the transition function \(\delta\) and computes \(q_t = \delta(q_{t-1}, \sigma_t) = q_{t-1} \oplus \sigma_t\).
+        The second is a parallel solution, where we compute \(q_t\) as \(q_t = (\sum_{\tau \leq t} \sigma_{\tau}) \text{ mod } 2 \).
+        So which solution does Transformer take?
+      </p>
+      </div>
+
+      <div class='row'>
+        <hr>
+      </div>
+
+      <div class="row" id="sec-shortcut">
+        <div class='section-header'>Shortcut solutions <span style="font-size: 20px; font-weight: normal">[Back to <a href="#outline">outline</a>]</span>
+        </div>
+      </div>
+
+      <div class="row">
+      It turns out that it's more natural for Transformers to learn the parallel solution.
+      Let's first take a look at the computation graphs for these two solutions:
+      <figure class="main-figure" id="fig-comp-graphs">
+        <div class="image-row">
+          <figure class="subplot">
+            <img style='width:40%' src="resources/comp_graph_iterative.png" alt="Image description">
+            <figcaption>(a) the iterative solution \(q_t = \delta(q_{t-1}, \sigma_t) = q_{t-1} \oplus \sigma_t\)
+            </figcaption>
+          </figure>
+          <figure class="subplot">
+            <img style='width:40%' src="resources/comp_graph_parallel.png" alt="Image description">
+            <figcaption>(b) the parallel solution \(q_t = (\sum_{\tau \leq t} \sigma_{\tau}) \text{ mod } 2 \)</figcaption>
+          </figure>
+        </div>
+        <figcaption style="font-size:18px">Figure 2: Computation graphs for different solutions of parity.</figcaption>
+      </figure>
+
+      <p>
+        We can see that the iterative solution matches well with RNNs, whereas the parallel solution is natural for Transformers, whose computation is parallel across positions and sequential across layers.
+        Note that for the iterative solution, the longest path (highlighted in blue) in the computation graph has length \(T\), whereas the longest path in the parallel solution is of length 1.
+        We consider the length of the longest path in the computation graph as the number of sequential steps.
+        For simulating \(\mathcal{A}\) on sequences of length \(T\), solutions that require \(o(T)\) (i.e. sublinear in \(T\)) number of sequential steps are called <b>shortcut solutions</b>, or simply "shortcuts".
+      </p>
+
+      <p>
+        It may be helpful to clarify about the word "shortcut", which usually has a negative connotation in the literature.
+        For example, it has been used to refer to unintended/unwanted solutions, such as those depending on "spurious correlations" (e.g. classifying a cow based on the color of the grass background).
+        Our definition of "shortcut" is different: in this work, "shortcut" refers to the property that a simulation of \(\mathcal{A}\) requires fewer sequential steps than the length of the reasoning chain.
+        In other words, shortcuts in this work are not only not negative, but are also desirable for computation reasons.
+      </p>
+
+      </div>
+
+      <div class='row'>
+        <hr>
+      </div>
+
+      <div class="row" id="sec-associative">
+        <div class='section-header'>Why can we hope for shortcuts? <span style="font-size: 20px; font-weight: normal">[Back to <a href="#outline">outline</a>]</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <p>
+          Given the recurrent nature of the reasoning task, it may not be obvious a prior why we can always hope for shortcuts.
+          The answer turns out to be a single word: associtiativity.
+        </p>
+        
+        <p>
+          Recall that our goal is to simulate \(\mathcal{A}\), that is, to learn the mapping \(F_T := \delta(\cdot, \sigma_T) \circ \delta(\cdot, \sigma_{T-1}) \cdots \circ \delta(\cdot, \sigma_2) \circ \delta(\cdot, \sigma_1)\), such that \(q_T = F_T(q_0)\).
+          That is, we need to learn the composition of functions \(\delta(\cdot, \sigma): Q \rightarrow Q\), which is a partial application of \(\delta\) on an input \(\sigma\).
+          For a finite \(Q\), such functions can be represented as matrices.
+          For instance, for parity, \(\delta(\cdot, 0) = \begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix}\) and \(\delta(\cdot, 1) = \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\).
+          Function composition hence corresponds to matrix multiplication, which is <em>associative</em>.
+          This allows us to take a divide-and-conquer approach and build a binary tree, whose tree depth corresponds to the number of sequential steps, i.e. \(O(\log T)\) for sequences of length \(T\).
+        </p>
+
+        <figure class="centered-image" id="fig-binary-tree">
+          <img style='width:30%' src="resources/binary_tree.png" alt="Binary tree">
+          <figcaption>Figure 3: Associativity enables a divide-and-conquer approach. The computation can be parallized at all
+            positions.</figcaption>
+        </figure>
+
+        <p>
+          This gives rise to a \(O(\log T)\)-layer Transformer implementation, where each layer simulates one level of the tree;
+          the formal statement is given by Theorem 1 of <a href="https://arxiv.org/abs/2210.10749">the paper</a>.
+        </p>
+
+        <p>
+          As a side note, let's talk about why there's a big-Oh: if we change the binary tree to an \(k\)-nary tree, then the number of layers required will be \(\log_k T = \frac{\log 2}{\log k} \cdot \log_2 T\).
+          That is, the larger the value of \(k\), the fewer the number of layers required.
+          Why not taking \(k = T\) then, so that 1 layer suffices? The reason is that the MLP width required to implement such a \(k\)-nary node/gate grows exponentially in \(k\).
+          Hence if we restrict the MLP with to be polynomial in \(T\), then the number of layers has to grow with \(\log T\).
+          In other words, the number of layers is a meaningful complexity measure only if other parts of the Transformer are properly restricted, such as the MLP width.
+          What restrictions to impose is somewhat subtle; please refer to our paper for more discussions if you are interested.
+        </p>
+      </div>
+
+      <div class='row'>
+        <hr>
+      </div>
+
+      <div class="row" id="sec-krohn-rhodes">
+        <div class='section-header'>Shorter shortcuts with Krohn-Rhodes
+          <span style="font-size: 20px; font-weight: normal">[Back to <a href="#outline">outline</a>]</span>
+        </div>
+      </div>
+      
+      <div class="row">
+        <p>
+          One takeaway so far is that Transformers can implement \(O(\log T)\)-layer shortcuts for simulating any \(\mathcal{A}\).
+          A natural next question is: is it possible to use fewer layers?
+        </p>
+
+        <p>
+          We know that the answer is positive at least for some special cases.
+          For example, the parallel solution of the parity counter (i.e. \(q_{t} = (\sum_{\tau \leq t} \sigma_2) \text{ mod } 2\)) can be implemented by 1 Transformer layer with uniform attention, since we only need to count the number of 1s in the input. 
+          More generally, such 1-layer counting solution suffices when the function composition is <em>commutative</em> (in addition to associative), that is, \(f \circ g = g \circ f\).
+          In this case, the function composition is not affected by the ordering of the functions, and is affected only by the number of times each function appear in the to-be-composed sequence.
+        </p>
+        <p>
+          What if the function composition is <em>not</em> commutative then?
+        </p>
+      </div>
+
+      <div class="row">
+        <h3>Decomposition: a car example</h3>
+      </div>
+
+      <div class="row">
+        The key idea is to decompose \(\mathcal{A}\) into simpler objects, each of which has commutative compositions.
+        Let's demonstrate this with an example.
+        Imagine there is a car driving on a circular road with 4 stations.
+        The car can either drive forward 1 step to the next station, or stay at the current station but make a U-turn. 
+        There are hence 8 states for the car, i.e. the product of 4 positions (stations) and 2 directions.
+        The input \(D\) changes the position part of the state and \(U\) changes the direction; the transition function can be defined accordingly.
+        <figure class="centered-image" id="fig-car">
+          <img style='width:50%' src="resources/car.png" alt="Car example">
+          <figcaption>Figure 4: The car-on-a-circle example: this can be modeled with a 8-state \(\mathcal{A}\), with 2
+            non-commutative actions.</figcaption>
+        </figure>
+        <!-- \[
+          Q = \{0 \text{ (clockwise)}, 1 \text{ (counterclosewise)}\} \times \{0, 1, 2, 3\},
+          \quad 
+          \Sigma = \{D \text{ (drive to the next station)}, U \text{ (stay and make a U-turn)}\}.
+        \] -->
+      
+      <p>
+        Suppose we start with the state \(q_0 = (&#x1F697;, 0) \), and take a series of actions \(\sigma_{1:𝑇}=\) <span style="color: #5C93F2">\(DDD\)</span><span style="color: orange">\(U\)</span><span style="color: #5C93F2">\(DD\)</span><span style="color: orange">\(UU\)</span><span style="color: #5C93F2">\(D\)</span>.
+        How can we determine the final state of the car without carrying out the actions one by one?
+      </p>
+
+      <p>
+        One observation is that to determine the direction of the car, we can ignore <span style="color: #5C93F2">\(D\)</span> and count the number of <span style="color: orange">\(U\)</span> only; that is, determining the direction is a parity task (i.e. sum-mod-2) on <span style="color: orange">\(U\)</span>, which can be implemented with 1 Transformer layer as we saw earlier.
+      </p>
+        <figure class="centered-image" id="fig-car-step1">
+          <div class="image-container">
+            <img style='width:33%' src="resources/car_step1.png" alt="Car example, step 1">
+            <figcaption>Figure 5: Car example, step 1: determining the direction of the car reduces to solving a parity task on
+              \(U\), ignoring \(D\). The parity task is now encoded with {1, -1}, which respectively correspond to {0, 1} in the
+              previous parity counter example.
+            </figcaption>
+          </div>
+        </figure>
+
+      <p>
+        Next, note that once we figure out the direction of the car at each position, the position of the car can be determined by taking the signed sum of <span style="color: #5C93F2">\(D\)</span> mod 4 (since there are 4 positions), where the signs are given by the parity from <span style="color: orange">\(U\)</span>.
+      </p>
+        <figure class="centered-image" id="fig-car-step2">
+          <div class="image-container">
+            <img style='width:35%' src="resources/car_step2.png" alt="Car example, step 2">
+            <figcaption>Figure 6: Car example, step 2: determining the position of the car is the same as computing the sum of
+              the signed \(D\) then mod 4, where the signs are obtained by solving the parity task on \(U\).
+            </figcaption>
+          </div>
+        </figure>
+
+      <p>
+        Each of the sum-mod operation can be implemented with 1 Transformer layer: the sum is implemented with uniform attention, and the mod is computed with the MLP of the Transformer layer.
+        Handling the signed sum requires an extra \(O(1)\) layer, so the total number of layers is \(O(1)\), which is smaller than \(\log T\) -- in fact, it is independent of \(T\)!
+      </p>
+      </div>
+
+      <div class="row">
+        <h3>Decomposition: Krohn-Rhodes Theorem</h3>
+      </div>
+
+      <div class="row">
+        <p>
+          The takeaway from the car example is that if we can decompose \(\mathcal{A}\) into "simpler" objects that each can be easily simulated, then simulating \(\mathcal{A}\) is also easy.
+          The car example might appear to be a rare special case at first glance, but it turns out that the existence of such decomposition is surprising common.
+        </p>
+
+        <p>
+          The tools we need come from the <b>Krohn-Rhodes Theorem</b>, a landmark result which can be considered as a vast generalization of (the uniqueness of) prime factorization for integers to automata.
+          At a high level, Krohn-Rhodes decomposition theorem says that any <em>solvable</em> \(\mathcal{A}\) can be decomposed into 2 types of "prime factors": mod counters and memory units.
+          The <b>mod counter</b> is a generalization of the parity counter, where instead of mod-2, it can be mod-\(p\) for any prime
+          number \(p\).
+          The <b>memory unit</b>, also known as a <em>reset</em>, is a multi-state generalization of the 2-state 1-bit memory unit defined as follows:
+        </p>
+        <figure class="centered-image" id="fig-memory-unit">
+          <img style='width:30%' src="resources/memory_unit.png" alt="1-bit memory unit">
+          <figcaption>Figure 7: 1-bit memory unit: there are 2 states and 3 actions: the actions \(\sigma_{&#x2663;},
+            \sigma_{&#x2666;}\) sets the state to
+            \(&#x2663;, &#x2666;\) respectively (i.e. <em>writing</em> to the memory unit), and the no-op action \(\bot\) leaves
+            the state unchanged (i.e. <em>reading</em> from the memory unit).
+          </figcaption>
+        </figure>
+
+        <p>
+          Interestingly, both types of prime factors can be efficiently implemented by Transformers, using two extreme modes of self-attention. 
+          The first mode is uniform attention, which computes the sum (scaled from the average) required by the mod counter, followed by an MLP to compute the mod.
+          The other mode is sparse attention, where all of the attention weight is put on the single location of the last "write" operator.
+        </p>
+        <figure class="main-figure" style="margin-top: 12px;" id="fig-2-factors">
+          <div class="image-row" >
+            <figure class="subplot">
+              <img style='width:80%' src="resources/attn_uniform.png" alt="Mod counter and uniform attention">
+              <figcaption>(a) The mod counter can be implemented with 1 Transformer layer with uniform attention.
+              </figcaption>
+            </figure>
+            <figure class="subplot">
+              <img style='width:80%' src="resources/attn_sparse.png" alt="Memory unit and sparse attention">
+              <figcaption>(b) The memory unit can be implemented with 1 Transformer layer with sparse attention.
+              </figcaption>
+            </figure>
+          </div>
+          <figcaption style="font-size:18px">Figure 8: The 2 types of "prime factors" given by Krohn-Rhodes can both be implemented efficiently with self-attention.</figcaption>
+        </figure>
+
+      </div>
+
+      <!-- <div class="row">
+        <h4 class="paragraph">Interlude: Transformation semigroups</h4>
+
+        This section will expand on the algebraic structure of \(\mathcal{A}\); you can jump to the <a href="#subsec-KR-summary">end of the section</a> directly if you want to skip in these technical details.
+        (TODO)
+      </div> -->
+
+      <div class="row", id="subsec-KR-summary">
+        <!-- <h4 class="paragraph">Putting it together</h4> -->
+
+        <p>
+          Krohn-Rhodes tells us that to simulate \(\mathcal{A}\), it suffices to simulate both types of prime factors as well as
+          the mechanism by which these factors are combined together.
+          We have seen that each type of factors can be implemented by 1 Transformer layer, and it can be shown that the
+          combining steps can be implemented with \(O(1)\) layers as well.
+          The overall number of combing steps can be shown to be \(\text{poly}(|Q|)\), so the total number of layers to simulate
+          \(\mathcal{A}\) is \(\text{poly}(|Q|)\), independent of the sequence length \(T\).
+          Theorem 2 in <a href="https://arxiv.org/abs/2210.10749">the paper</a> provides formal statement of the results.
+        </p>
+      </div>
+
+      <div class='row'>
+        <hr>
+      </div>
+
+
+      <div class="row" id="sec-empirical">
+        <div class='section-header'>Empirical results
+          <span style="font-size: 20px; font-weight: normal">[Back to <a href="#outline">outline</a>]</span>
+        </div>
+      </div>
+
+      <div class="row">
+      
+        <p>
+          What we've seen so far addresses the theoretical capabilities of Transformers for simulating semiautomata, where we saw
+          a divide-and-conquer approach that gives a \(O(\log T)\)-layer simulator for any \(\mathcal{A}\), as well as a more
+          succinct \(O(\text{poly}(|Q|)\)-layer construction by Krohn-Rhodes that holds for any \(\mathcal{A}\) that is solvable.
+          However, it is unclear whether these solutions can be found in practice with finite samples, which is the focus of this section.
+        </p>
+      </div>
+
+      <div class="row">
+        <h3>1. Can shortcuts be found in practice?</h3>
+      </div>
+
+      <div class="row">
+        <figure class="figure-right" id="table-main">
+          <img style='width:90%' src="resources/results_main_table.png" alt="Main table of results">
+          <figcaption>Table 1: Accuracy for different \(\mathcal{A}\) (row) across different Transformer depth (column),
+            where lighter color corresponds to better accuracy.
+            Results are the max over 20 random runs.
+          </figcaption>
+        </figure>
+          <!-- <div class="image-container-right" id="table-main">
+            <img style='width:33%' src="resources/results_main_table.png" alt="Main table of results">
+            <p>Table 1: Accuracy for different \(\mathcal{A}\) (row) across different Transformer depth (column). Results
+              are taken as the max over 20 random runs.
+            </p>
+          </div> -->
+        <p>
+          The most basic empirical question is, whether training on finite samples can find good solutions for simulating
+          \(\mathcal{A}\) at all.
+          To study this, we train GPT-2 style Transformers on semiautomata data, where the model takes as inputs sequences of
+          \(\sigma_1, \sigma_2, \cdots, \sigma_T \in \Sigma\), and trains to predict the corresponding states \(q_1, q_2,
+          \cdots, q_T \in Q \), for different choices of \(\mathcal{A} = (Q, \Sigma, \delta)\).
+        </p>
+
+        <p>
+          Table 1 shows the results for 19 different \(\mathcal{A}\) across 16 choices of Transformer depth, which gives a positive answer to our question.
+          Moreover, the number of layers required to achieve good performance roughly follows the depth of decomposition understood by theory.
+          At the top part of the table we have some "simple" automata, such as Dyck and cyclic groups, which can be simulated with \(O(1)\) layers.
+          On the bottom we have some more complex automata, such as the quaternion group \(Q_8\) (whose decomposition requires going through the wreath product), the alternating group \(A_5\) (which is the smallest non-solvable group), and the symmetric group \(S_5\) (which is \(NC^1\) complete).
+
+        </p>
+
+        <p>
+          The results also highlight some challenges.
+          The first is training instability. Take cyclic groups (e.g. parity/\(C_2\)) as an example, even though 1-layer Transformers suffice in theory, their empirical performances are often low. 
+          The better performance of deeper Transformers is not explained by our representationabl results and can be a goal for future investigations.
+
+          Secondly, solutions found in practice do not necessarily follow our theoretical constructions.
+          Hence understanding these empirical solutions can be an interesting next step.
+          Towards this, let's see an example on the 1d gridworld automaton.
+        </p>
+      </div>
+
+      <div class="row">
+        <h4 class="paragraph">1.1. Case study: 1d gridworld with \(O(1)\)-layer solution</h4>
+        <p>
+          As discussed earlier, there's no guarantee that solutions found in practice follow the Krohn-Rhodes construction.
+          In the following, we'll see an example where Transformer learns a solution that's even shorter than what's given by Krohn-Rhodes.
+        </p>
+
+        <p>
+          Let's consider the <em>1d gridworld</em>, which consists of \(n\) states on a 1d line.
+          There are 2 actions, going left or right, which updates the state to the left or right by 1 step, except when it's already at the leftmost or rightmost boundary (i.e. state 1 or \(n\)), in which case the action does not change the state.
+        </p>
+
+        <figure class="centered-image" id="fig-gridworld">
+          <img style='width:60%' src="resources/gridworld.png" alt="1d gridworld"><br>
+          <figcaption style="width: 50%">Figure 9: An exampe of 1d gridworld with \(n=4\); some boundary states are highlighted
+            with yellow circles.
+          </figcaption>
+        </figure>
+
+        <p>
+          For gridworld, the effect of a sequence of actions depends the starting state.
+          For example, if we start at state 1, then the sequences <span style="color: red">LL</span><span style="color: blue">RR</span> and <span style="color: red">L</span><span style="color: blue">R</span><span style="color: red">L</span><span style="color: blue">R</span> will end in different states;
+          but if we start at state 3, then these two sequences will lead to the same final state.
+          This might lead to a (false) intuition that in order to determine the final state, it is necessary track the state at each time step, making a parallel solution seem unlikely.
+          Of course, noticing that gridworld is solvable, Krohn-Rhodes already guarantees a parallel solution of \(\tilde{O}(|Q|^2) = \tilde{O}(n^2)\) sequential steps.
+          What surprised us is that GPT2 found a \(O(1)\)-layer solution, independent even of \(n\).
+        </p>
+
+        <p>
+          The key idea of this succinct solution is that at each step, we want to identify the last time that we hit a boundary state (i.e. state 1 or state \(n\)).
+          Why is this helpful? Because if we don't hit any boundary, then the position can be simply determined by the sum of actions (let <span style="color: red">L</span> correspond to -1 and <span style="color: blue">R</span> to 1), which is implementable with 1 layer of uniform attention.
+        </p>
+
+        <p>
+          Figure 10 shows some evidence that Transformer indeed learns such boundary detectors (which helped us to find an exact algorithm in Theorem 3 of <a href="https://arxiv.org/abs/2210.10749">the paper</a> -- it figured this out before us &#x1F916;), where the model puts all attention weight of a row at a single location, which is exactly where the last boundary state is.
+3        <figure class="centered-image" id="fig-gridworld-boundary">
+          <img style='width:40%' src="resources/boundary_detection.png" alt="boundary detection for gridworld"><br>
+          <figcaption style="width: 80%">Figure 10: Row-normalized causal attention maps from the last layer of a 4-layer GPT2 model.
+            The white/gray dots mark the positions where the state is in \(\{1, n\}\).
+            The bright yellow cells mean that the attention of a row concentrates at a single position, which coincides with the positions of boundary states.
+          </figcaption>
+        </figure>
+
+      </div>
+
+
+      <div class="row">
+        <h3>2. Are shortcuts strictly better than iterative/autoregressive solutions?</h3>
+      </div>
+
+      <div class="row">
+      
+      <p>
+        While shortcuts and iterative/autoregressive solutions are both valid solutions for simulation automata, shortcuts have the additional advantage that the amount of computation grows more slowly with the sequence length \(T\).
+        Moreover, these shortcuts are not hard to find in practice.
+        Does this mean we should always prefer shortcuts then?
+      </p>
+
+      <p>
+        Well, maybe not.
+        One thing you may have noticed is that the experiments we have seen are a bit idealized, in the sense that the training signals are clean and fully available, and the testing distribution is exactly the same as the one during training.
+        What would happen if either training or testing become less ideal?
+        As we will see next, less ideal setups expose the <em>brittleness</em> of these empirically found shortcuts.
+      </p>
+
+      <h4 class="paragraph">2.1. Brittleness when trained with limited supervision</h4>
+      
+        <figure class="figure-right" id="fig-limited-supervision">
+          <img style='width:65%' src="resources/supervision_incomplete.png" alt="Main table of results">
+          <figcaption>Figure 11: Training with incomplete supervision, where \(q_t\) is revealed with different probability.
+          </figcaption>
+        </figure>
+      <p>
+        <!-- <b>Training with limited supervision</b>: -->
+        A natural way to make training harder is to reduce the amount of supervision.
+        We do this in two ways: 1) <em>Indirect supervision</em>, where instead of seeing \(q_t\), we train and test on a function of \(q_t\).
+        2) <em>Incomplete supervision</em>, where instead of seeing \(q_t\) for every \(t\), we reveal \(q_t\) only with some probability \(p_{\text{reveal}} \in (0,1)\).
+      </p>
+
+      <p>
+        For indirect supervision, Transformers are able to learn well for all cases that we checked, and we refer the readers to Section 5.1 of <a href="https://arxiv.org/abs/2210.10749">our paper</a> for details.
+        However, Transformers struggle under incomplete supervision.
+        Figure 11 shows experiments on length-100 sequences from the symmetric group \(S_5\).
+        Transformer becomes harder to train as the supervision signal gets sparser, while LSTM gets 100% accuracy in all cases.
+      </p>
+
+      </div>
+
+      <div class="row">
+        <h4 class="paragraph">2.2. Brittleness when tested out-of-distribution</h4>
+
+      <p>
+        Let's go back to the parity example for OOD robustness.
+        We train the model on sequences of length 40, where each token in the sequence has an equal probability of being 0 or 1, i.e. \(p(\sigma=1) = 0.5\).
+        At test time, we check the performance on sequences of the same length, but with different number of 1s.
+      </p>
+
+      <p>
+        Before seeing actual results, we can already spot some potential failure modes of the shortcut solution given in theory.
+        Recall that the parallel solution of parity computes \(q_t = (\sum_{\tau \in [t]} \sigma_\tau) \text{ mod } 2\), where the mod is computed by MLP.
+        We know that MLP with relu activation cannot generalize nonlinearly outside the range that it is trained on [<a href="#cite-Xu">Xu et al. 20</a>].
+        Hence it's reasonable to expect that the model will struggle at unseen or less commonly seen values of \((\sum_{\tau \in [t]} \sigma_\tau)\).
+      </p>
+
+        <figure class="figure-right" id="fig-parity-ood">
+          <img style='width:65%' src="resources/parity_OOD.png" alt="Parity OOD">
+          <figcaption>Figure 12: Testing OOD: for parity, the model is trained on sequences of length 40 with
+            \(p(\sigma=1)=0.5\) (i.e. the expected number of 1s is 20, marked by the gray line), and evaluated on length-40
+            sequences containing different number of 1s.
+          </figcaption>
+        </figure>
+      <p>
+        As seen in Figure 12, this is indeed what happens in practice.
+        During training, the number of 1s in a length-40 sequence concentrates around 20.
+        At test time, the model performance degrades significantly when the number of 1s deviates from 20, as shown by the dark blue line in Figure 12.
+        The poor performance at the upper tail is expected, since these higher values are less commonly seen in the training sequences.
+        However, the model should have seen the small values of number of 1s from subsequences; then why is the performance still low?
+        A potential reason is that the model has learned to leverage the correlation between the position (provided by positional encoding) and the number of 1s till this position, and hence struggles when such correlation is broken at test time.
+        This hypothesis is supported by the fact that when we train the model with randomly shifted position encoding, the performance at the small values of \((\sum_{\tau \in [t]} \sigma_t)\) is much better, as shown by the light blue line in Figure 12.
+      </p>
+
+      </div>
+
+
+      <div class="row">
+        <h4 class="paragraph">2.3. Autoregressive solutions as mitigation</h4>
+
+          <figure class="figure-right" id="fig-scratchpad">
+            <img style='width:60%' src="resources/scratchpad.png" alt="Scratchpad results">
+            <figcaption style='width:90%'>Figure 13: When a Transformer is made autoregressive using scratchpad, it can achieve perfect OOD performance like LSTM.
+              The results are with parity, where \(P(\sigma=1)\) is 0.5 during training and is varied at test time.
+            </figcaption>
+          </figure>
+        <p>
+          Finally, we show that these problems can be circumvented with the autoregressive mode of Transformer:
+          Instead of predicting \(\{q_t\}\) for all \(t\) at once, we use the idea of scratchpad [<a href="#cite-Nye">Nye et al. 21</a>] and train the Transformer to predict \(q_t\) one at a time, taking previous \(q_{t-1}\) as input. 
+          We also add recency bias [<a href="#cite-Press">Press et al. 21</a>] to encourage the model to attend more on recent inputs.
+          Scratchpad with recency biases helps guide the Transformer to learn an iterative solution, where each step tries to compute \(\delta\).
+          As shown in Figure 13, this resolves the aforementioned OOD generalization failure of Transformer.
+        </p>
+
+      <p>
+        <em>Can we develop robust shortcuts?</em>
+        As discussed earlier, shortcuts are computationally appealing because it has a better dependency on the sequence
+        length.
+        However, in practice, iterative/autoregressive solutions consistently outperform empirically-found shortcuts in terms of robustness.
+        This is potentially due to the more favorable <em>recurrent inductive bias</em>, which is sequential and recursive in nature and bottlenecked by memory [<a href="#cite-Abnar">Abnar et al. 20</a>].
+        Developing better generalizing shortcuts might require incorporating such inductive biases and is an interesting future direction.
+      </p>
+
+    </div>
+
+
+
+      
+      <div class='row'>
+        <hr>
+      </div>
+      
+      <div class='row'>
+        <div class='section-header' id="references">References</div>
+      </div>
+
+      <div class="row">
+        <ul>
+        <li id="cite-Nogueira">Rodrigo Nogueira, Zhiying Jiang, Jimmy Lin: <a href="https://arxiv.org/abs/2102.13019">Investigating the Limitations of Transformers with Simple Arithmetic Tasks</a>
+        </li>
+        <li id="cite-Bhattamishra">Satwik Bhattamishra, Kabir Ahuja, Navin Goyal: <a href="https://arxiv.org/abs/2009.11264">On the Ability and Limitations of Transformers to Recognize Formal Languages</a>
+        </li>
+        <li id="cite-Yao">Shunyu Yao, Binghui Peng, Christos Papadimitriou, Karthik Narasimhan: <a href="https://arxiv.org/abs/2105.11115">Self-Attention Networks Can Process Bounded Hierarchical Languages</a>
+        </li>
+        <li id="cite-Xu">Keyulu Xu, Mozhi Zhang, Jingling Li, Simon S. Du, Ken-ichi Kawarabayashi, Stefanie Jegelka: <a href="https://arxiv.org/abs/2009.11848">How Neural Networks Extrapolate: From Feedforward to Graph Neural Networks</a></li>
+        <li id="cite-Nye">Maxwell Nye, Anders Johan Andreassen, Guy Gur-Ari, Henryk Michalewski, Jacob Austin, David Bieber,
+          David Dohan, Aitor
+          Lewkowycz, Maarten Bosma, David Luan, Charles Sutton, Augustus Odena:
+          <a href="https://arxiv.org/abs/2112.00114">Show Your Work: Scratchpads for Intermediate Computation with Language
+            Models</a>
+        </li>
+        <li id="cite-Press">Ofir Press, Noah A. Smith, Mike Lewis:
+          <a href="https://arxiv.org/abs/2108.12409">Train Short, Test Long: Attention with Linear Biases Enables Input Length
+            Extrapolation</a>
+        </li>
+        <li id="cite-Abnar">Samira Abnar, Mostafa Dehghani, Willem Zuidema:
+          <a href="https://arxiv.org/abs/2006.00555">Transferring Inductive Biases through Knowledge Distillation
+</a>
+        </li>
+        </ul>
+      </div>
+
+      <div class='row'>
+        <hr>
+      </div>
+
+
+    </div>
+  </body>
+</html>

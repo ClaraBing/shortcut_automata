@@ -1,0 +1,326 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: #555;
+}
+
+.color1 {
+    background-color: #CCC;
+}
+
+/*#header {
+  width: 100%;
+  height: 275px;
+  background-color: #F0EAD6;
+  background-color: #CCC; 
+}*/
+
+#header {
+    max-width: 1170px;
+    width: 100%;
+    height: 300px;
+    font-weight: 300;
+    color: black;
+    /*  color: white;*/
+    margin: 0 auto;
+    margin-bottom: 75px;
+}
+
+hr {
+    border-top: 1px solid #CCC;
+}
+
+.paragraph {
+    font-size: 20px;
+    font-weight: bold;
+    font-style: italic;
+    color: #555;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    /* Add any additional styling properties you desire */
+}
+
+.figure-right {
+    float: right;
+    margin-left: 20px;
+    /* Adjust the margin as needed */
+    margin-bottom: 20px;
+    /* Adjust the margin as needed */
+    width: 45%;
+    text-align: center;
+    /* Center align the caption */
+}
+
+
+.image-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+
+.subplot {
+    width: calc(50% - 10px);
+    text-align: center;
+}
+
+.subplot-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.subplot figcaption {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #666;
+}
+
+.main-figure {
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-caption {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/*#header-inner {
+  position: absolute;
+  width: 70%;
+  left: 10%;
+  top: 150px;
+}*/
+
+#header-inner {
+    padding-top: 100px;
+    padding-left: 50px;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.image-container-right {
+    float: right;
+    margin-left: 20px;
+    /* Adjust the margin as needed */
+    margin-bottom: 20px;
+    /* Adjust the margin as needed */
+    text-align: center;
+    /* Center align the caption */
+    width: auto;
+    order: 1;
+}
+
+.image-caption {
+    margin: 0;
+}
+
+
+.image-container {
+    display: inline-block;
+    text-align: center;
+}
+
+.centered-image {
+    text-align: center;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.centered-image img {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+}
+
+.centered-image figcaption {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 18px;
+    text-align: left;
+    color: rgba(101, 101, 101, 0.872);
+    width: 70%;
+}
+
+.custom-emoji {
+    display: inline-block;
+    vertical-align: middle;
+    width: 24px;
+    /* Adjust this value to match the desired size of your emoji */
+    height: auto;
+}
+
+
+.img-me {
+    border: 8px solid white;
+    float: left;
+    width: 200px;
+}
+
+.header-text {
+    margin-top: 80px;
+    margin-left: 250px;
+}
+
+.header-text-name {
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.header-text-email {
+    font-size: 20px;
+    font-style: italic;
+}
+
+.header-text-desc {
+    font-size: 20px;
+}
+
+#contact-info {
+    position: absolute;
+    left: 80%;
+    width: 20%;
+    top: 360px;
+    height: 100px;
+    background-color: #EEE;
+}
+
+.vspace {
+    margin-bottom: 20px;
+}
+
+.vspace-top {
+    margin-top: 15px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.paper-image {
+    width: 70%;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    display: block;
+    margin: 0 auto;
+}
+
+.paper-image-big {
+    width: 70%;
+    padding-bottom: 40px;
+    display: block;
+    margin: 0 auto;
+}
+
+.logo-image {
+    width: 50px;
+    padding-bottom: 0px;
+    vertical-align: middle;
+}
+
+.paper-title {
+    font-weight: bold;
+}
+
+.paper-authors {
+    font-style: italic;
+}
+
+.paper-link {}
+
+.container {
+    margin-top: 25px;
+    margin-bottom: 50px;
+}
+
+.cite {
+    background-color: #eeeeee;
+    font-family: Courier;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.section-header {
+    font-size: 32px;
+    font-weight: 500;
+    /*    margin-top: 10px;
+    margin-bottom: 20px;*/
+}
+
+.title-header {
+    font-size: 32px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+.no-pad {
+    padding: 0;
+}
+
+.authors {
+    margin-bottom: 10px;
+}
+
+.affiliations {
+    margin-bottom: 10px;
+}
+
+.logos {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.row p {
+    margin-top: 15px;
+}
+
+.row ul {
+    margin-top: 15px;
+}
+
+.video-div {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+.collapsible {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: #f1f1f1;
+    padding: 2px;
+    width: 100%;
+    text-align: left;
+    font-size: 18px;
+}
+
+.collapsible:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.collapsible.active:after {
+    content: "\2212";
+}
+
+.content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: #f1f1f1;
+}
