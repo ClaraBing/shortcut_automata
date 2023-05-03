@@ -237,8 +237,12 @@
         Note that there are usually multiple ways to simulate \(\mathcal{A}\). Take the parity counter as an example, there are at least 2 ways to simulate it.
         The first is an iterative solution, where we simply apply the definition of the transition function \(\delta\) and computes \(q_t = \delta(q_{t-1}, \sigma_t) = q_{t-1} \oplus \sigma_t\).
         The second is a parallel solution, where we compute \(q_t\) as \(q_t = (\sum_{\tau \leq t} \sigma_{\tau}) \text{ mod } 2 \).
+      </p>
+
+      <p>
         So which solution does Transformer take?
       </p>
+
       </div>
 
       <div class='row'>
@@ -251,22 +255,37 @@
       </div>
 
       <div class="row">
-      It turns out that it's more natural for Transformers to learn the parallel solution.
-      Let's first take a look at the computation graphs for these two solutions:
-      <figure class="main-figure" id="fig-comp-graphs">
-        <div class="image-row">
-          <figure class="subplot">
-            <img style='width:40%' src="resources/comp_graph_iterative.png" alt="Image description">
-            <figcaption>(a) the iterative solution \(q_t = \delta(q_{t-1}, \sigma_t) = q_{t-1} \oplus \sigma_t\)
-            </figcaption>
-          </figure>
-          <figure class="subplot">
-            <img style='width:40%' src="resources/comp_graph_parallel.png" alt="Image description">
-            <figcaption>(b) the parallel solution \(q_t = (\sum_{\tau \leq t} \sigma_{\tau}) \text{ mod } 2 \)</figcaption>
-          </figure>
-        </div>
-        <figcaption style="font-size:18px">Figure 2: Computation graphs for different solutions of parity.</figcaption>
+
+      <p>
+        It turns out that it's more natural for Transformers to learn the parallel solution.
+        Recall that a Transformer [<a href="#cite-Vaswani">Vaswani et al. 17</a>] consists of a stack of layers, where a layer
+        performs simultaneous computation across all positions.
+      </p>
+      <figure class="centered-image" id="fig-car">
+        <img style='width:65%' src="resources/transformer.png" alt="Transformer recap">
+        <figcaption><em>An illustration of a Transformer model</em>: while each layer is computed sequentially, the
+          computation across positions within the same layer is parallel, which is a major difference from RNNs.
+        </figcaption>
       </figure>
+
+      <p>    
+        A crucial difference between Transformers and RNNs is whether computation across positions is parallel or not.
+        Let's compare these two types of models with the computation graphs for the iterative and parallel solutions:
+      </p>
+        <figure class="main-figure" id="fig-comp-graphs">
+          <div class="image-row">
+            <figure class="subplot">
+              <img style='width:40%' src="resources/comp_graph_iterative.png" alt="Image description">
+              <figcaption>(a) the iterative solution \(q_t = \delta(q_{t-1}, \sigma_t) = q_{t-1} \oplus \sigma_t\)
+              </figcaption>
+            </figure>
+            <figure class="subplot">
+              <img style='width:40%' src="resources/comp_graph_parallel.png" alt="Image description">
+              <figcaption>(b) the parallel solution \(q_t = (\sum_{\tau \leq t} \sigma_{\tau}) \text{ mod } 2 \)</figcaption>
+            </figure>
+          </div>
+          <figcaption style="font-size:18px">Figure 2: Computation graphs for different solutions of parity.</figcaption>
+        </figure>
 
       <p>
         We can see that the iterative solution matches well with RNNs, whereas the parallel solution is natural for Transformers, whose computation is parallel across positions and sequential across layers.
@@ -737,6 +756,8 @@
 
       <div class="row">
         <ul>
+        <li id="cite-Vaswani">Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin: <a target=”_blank” href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>
+        </li>
         <li id="cite-Nogueira">Rodrigo Nogueira, Zhiying Jiang, Jimmy Lin: <a target=”_blank” href="https://arxiv.org/abs/2102.13019">Investigating the Limitations of Transformers with Simple Arithmetic Tasks</a>
         </li>
         <li id="cite-Bhattamishra">Satwik Bhattamishra, Kabir Ahuja, Navin Goyal: <a target=”_blank” href="https://arxiv.org/abs/2009.11264">On the Ability and Limitations of Transformers to Recognize Formal Languages</a>
