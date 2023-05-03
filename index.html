@@ -130,7 +130,7 @@
       <ul>
         <li><a target="_blank" href="https://arxiv.org/abs/2210.10749">Paper</a> (<a target="_blank" href="https://openreview.net/forum?id=De4FYqjFueZ">OpenReview</a>)
         </li>
-        <li>A <a href="https://huggingface.co/datasets/synthseq/automata/tree/main">HuggingFace Dataset</a> for various automata.
+        <li>A <a target=”_blank” href="https://huggingface.co/datasets/synthseq/automata/tree/main">HuggingFace Dataset</a> for various automata.
         </li>
         <li>Talks: <a target="_blank" href="https://recorder-v3.slideslive.com/#/share?share=80941&s=7f9d9970-75c3-493f-913b-dc1939752743">5min version</a> / <a target="_blank" href="https://www.youtube.com/watch?v=g8zdumOAWzw">1h version</a>
         </li>
@@ -143,7 +143,7 @@
               @article{liu2023transformers,<br>
               <ul>
                 title = {Transformers Learn Shortcuts to Automata},<br>
-                author={Liu, Bingbin and Ash, Jordan T and Goel, Surbhi and Krishnamurthy, Akshay and Zhang, Cyril},
+                author={Liu, Bingbin and Ash, Jordan T and Goel, Surbhi and Krishnamurthy, Akshay and Zhang, Cyril}, <br>
                 booktitle = {International Conference on Learning Representations}, <br>
                 year = {2023},<br>
                 url = {https://openreview.net/forum?id=De4FYqjFueZ},<br>
@@ -316,7 +316,7 @@
 
         <p>
           This gives rise to a \(O(\log T)\)-layer Transformer implementation, where each layer simulates one level of the tree;
-          the formal statement is given by Theorem 1 of <a href="https://arxiv.org/abs/2210.10749">the paper</a>.
+          the formal statement is given by Theorem 1 of <a target=”_blank” href="https://arxiv.org/abs/2210.10749">the paper</a>.
         </p>
 
         <p>
@@ -428,8 +428,8 @@
           <span style="color: #8e8e8e">
           <em>Side note: results in this section applies to all solvable \(\mathcal{A}\), that is, semiautomata whose transformation semigroup contains solvable groups only. 
             Solvable groups are defined as the groups for which all quotients in the Jordan-Holder series are abelian.
-            Please see <a href="https://arxiv.org/pdf/2210.10749.pdf#page=19">Section A.2</a> of our paper for a self-complete introduction to automata and (semi)groups, 
-            as well as <a href="https://arxiv.org/pdf/2210.10749.pdf#page=48">Definition 6</a> for a formal definition of solvable semiautomata.
+            Please see <a target=”_blank” href="https://arxiv.org/pdf/2210.10749.pdf#page=19">Section A.2</a> of our paper for a self-complete introduction to automata and (semi)groups, 
+            as well as <a target=”_blank” href="https://arxiv.org/pdf/2210.10749.pdf#page=48">Definition 6</a> for a formal definition of solvable semiautomata.
           </em>
           </span>
         </p>
@@ -490,7 +490,7 @@
           combining steps can be implemented with a constant number of layers as well.
           The overall number of combing steps can be shown to be \(\text{poly}(|Q|)\), so the total number of layers to simulate
           \(\mathcal{A}\) is \(\text{poly}(|Q|)\), independent of the sequence length \(T\).
-          Theorem 2 in <a href="https://arxiv.org/abs/2210.10749">the paper</a> provides formal statement of the results.
+          Theorem 2 in <a target=”_blank” href="https://arxiv.org/abs/2210.10749">the paper</a> provides formal statement of the results.
         </p>
       </div>
 
@@ -513,6 +513,14 @@
           succinct \(O(\text{poly}(|Q|)\)-layer construction by Krohn-Rhodes that holds for any \(\mathcal{A}\) that is solvable.
           However, it is unclear whether these solutions can be found in practice using standard training pipelines, which is the focus of this section.
         </p>
+
+        <figure class="centered-image" id="fig-memory-unit">
+          <img style='width:65%' src="resources/empirical_setup.png" alt="Empirical setup">
+          <figcaption><em>Empirical setup</em>: We train causally-masked GPT2-style models on semiautomaton data.
+            The setup follows the theory parts, that is, the inputs are \(\sigma_1, \sigma_2, \cdots, \sigma_T\) from the alphabet \(\Sigma\), and the outputs are corresponding states \(q_1, q_2, \cdots, q_T \in Q\) that the automaton goes through upon seeing the inputs, starting from some \(q_0 \in Q\) that is fixed for sequences from the same automaton.
+          </figcaption>
+        </figure>
+
       </div>
 
       <div class="row">
@@ -595,7 +603,7 @@
         </p>
 
         <p>
-          Figure 10 shows some evidence that Transformer indeed learns these boundary detectors (and such mechanistic understanding [<a href="#cite-Nanda">Nanda et al. 23</a>] helped us find an exact algorithm in Theorem 3 of <a href="https://arxiv.org/abs/2210.10749">the paper</a> --
+          Figure 10 shows some evidence that Transformer indeed learns these boundary detectors (and such mechanistic understanding [<a href="#cite-Nanda">Nanda et al. 23</a>] helped us find an exact algorithm in Theorem 3 of <a target=”_blank” href="https://arxiv.org/abs/2210.10749">the paper</a> --
           it figured this out before us &#x1F916;), where the model puts all attention weight of a row at a single location, which is exactly where the last boundary state is.
 
         <figure class="centered-image" id="fig-gridworld-boundary">
@@ -643,7 +651,7 @@
       </p>
 
       <p>
-        For indirect supervision, Transformers are able to learn well for all cases that we checked, and we refer the readers to Section 5.1 of <a href="https://arxiv.org/abs/2210.10749">our paper</a> for details.
+        For indirect supervision, Transformers are able to learn well for all cases that we checked, and we refer the readers to Section 5.1 of <a target=”_blank” href="https://arxiv.org/abs/2210.10749">our paper</a> for details.
         However, Transformers struggle under incomplete supervision.
         Figure 11 shows experiments on length-100 sequences from the symmetric group \(S_5\).
         Transformer becomes harder to train as the supervision signal gets sparser, while LSTM gets 100% accuracy in all cases.
@@ -729,28 +737,28 @@
 
       <div class="row">
         <ul>
-        <li id="cite-Nogueira">Rodrigo Nogueira, Zhiying Jiang, Jimmy Lin: <a href="https://arxiv.org/abs/2102.13019">Investigating the Limitations of Transformers with Simple Arithmetic Tasks</a>
+        <li id="cite-Nogueira">Rodrigo Nogueira, Zhiying Jiang, Jimmy Lin: <a target=”_blank” href="https://arxiv.org/abs/2102.13019">Investigating the Limitations of Transformers with Simple Arithmetic Tasks</a>
         </li>
-        <li id="cite-Bhattamishra">Satwik Bhattamishra, Kabir Ahuja, Navin Goyal: <a href="https://arxiv.org/abs/2009.11264">On the Ability and Limitations of Transformers to Recognize Formal Languages</a>
+        <li id="cite-Bhattamishra">Satwik Bhattamishra, Kabir Ahuja, Navin Goyal: <a target=”_blank” href="https://arxiv.org/abs/2009.11264">On the Ability and Limitations of Transformers to Recognize Formal Languages</a>
         </li>
-        <li id="cite-Yao">Shunyu Yao, Binghui Peng, Christos Papadimitriou, Karthik Narasimhan: <a href="https://arxiv.org/abs/2105.11115">Self-Attention Networks Can Process Bounded Hierarchical Languages</a>
+        <li id="cite-Yao">Shunyu Yao, Binghui Peng, Christos Papadimitriou, Karthik Narasimhan: <a target=”_blank” href="https://arxiv.org/abs/2105.11115">Self-Attention Networks Can Process Bounded Hierarchical Languages</a>
         </li>
-        <li id="cite-Xu">Keyulu Xu, Mozhi Zhang, Jingling Li, Simon S. Du, Ken-ichi Kawarabayashi, Stefanie Jegelka: <a href="https://arxiv.org/abs/2009.11848">How Neural Networks Extrapolate: From Feedforward to Graph Neural Networks</a></li>
+        <li id="cite-Xu">Keyulu Xu, Mozhi Zhang, Jingling Li, Simon S. Du, Ken-ichi Kawarabayashi, Stefanie Jegelka: <a target=”_blank” href="https://arxiv.org/abs/2009.11848">How Neural Networks Extrapolate: From Feedforward to Graph Neural Networks</a></li>
         <li id="cite-Nye">Maxwell Nye, Anders Johan Andreassen, Guy Gur-Ari, Henryk Michalewski, Jacob Austin, David Bieber,
           David Dohan, Aitor
           Lewkowycz, Maarten Bosma, David Luan, Charles Sutton, Augustus Odena:
-          <a href="https://arxiv.org/abs/2112.00114">Show Your Work: Scratchpads for Intermediate Computation with Language
+          <a target=”_blank” href="https://arxiv.org/abs/2112.00114">Show Your Work: Scratchpads for Intermediate Computation with Language
             Models</a>
         </li>
         <li id="cite-Press">Ofir Press, Noah A. Smith, Mike Lewis:
-          <a href="https://arxiv.org/abs/2108.12409">Train Short, Test Long: Attention with Linear Biases Enables Input Length
+          <a target=”_blank” href="https://arxiv.org/abs/2108.12409">Train Short, Test Long: Attention with Linear Biases Enables Input Length
             Extrapolation</a>
         </li>
         <li id="cite-Abnar">Samira Abnar, Mostafa Dehghani, Willem Zuidema:
           <a href="https://arxiv.org/abs/2006.00555">Transferring Inductive Biases through Knowledge Distillation</a>
         </li>
         <li id="cite-Nanda">Neel Nanda, Lawrence Chan, Tom Lieberum, Jess Smith, Jacob Steinhardt:
-          <a href="https://arxiv.org/abs/2301.05217">Progress measures for grokking via mechanistic interpretability
+          <a target=”_blank” href="https://arxiv.org/abs/2301.05217">Progress measures for grokking via mechanistic interpretability
 </a>
         </li>
         </ul>
